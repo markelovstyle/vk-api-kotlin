@@ -1,13 +1,27 @@
 package com.markelov.engines
 
+import com.markelov.http.HTTPRequest
 import iris.json.plain.IrisJsonItem
 
-interface PollingAPI : Runnable {
-    fun getIdByToken(): Int
-    fun getServer(): IrisJsonItem
-    fun makeLongRequest(server: Map<String, Any?>): IrisJsonItem
-    fun runPolling()
-    fun stop()
-    override fun run()
+abstract class PollingAPI: Runnable {
+    protected var stopped = false
+    protected val requester = HTTPRequest()
 
+    abstract fun getIdByToken(): Int
+    abstract fun getServer(): IrisJsonItem
+    abstract fun makeLongRequest(server: Map<String, Any?>): IrisJsonItem
+    abstract override fun run()
+
+    fun runPolling() {
+        /**
+         * Неблокирубщий запуск обработки событий
+         */
+        val thread = Thread(this)
+        thread.start()
+
+    }
+    fun stop() {
+        println("Stopping polling...")
+        this.stopped = true
+    }
 }

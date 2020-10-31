@@ -10,11 +10,9 @@ class Bot(
     private val wait: Int = 15,
     private val rpsDelay: Int = 0,
     groupId: Int = 0
-) : PollingAPI {
+) : PollingAPI() {
 
     private val groupId = if (groupId == 0) getIdByToken() else groupId
-    private var stopped = false
-    private val requester = HTTPRequest()
 
     override fun getIdByToken(): Int {
         val request = api.request("groups.getById", null)
@@ -31,14 +29,6 @@ class Bot(
         ))
     }
 
-    override fun runPolling() {
-        /**
-         * Неблокирующий запуск обработки событий
-         */
-        val thread = Thread(this)
-        thread.start()
-    }
-
     override fun run() {
         var server = getServer()
         while (!stopped) {
@@ -49,11 +39,6 @@ class Bot(
             emulate(event)
             server["response"]["ts"] = event["ts"]
         }
-    }
-
-    override fun stop() {
-        println("Stopping polling...")
-        this.stopped = true
     }
 
     private fun emulate(event: IrisJsonItem) {

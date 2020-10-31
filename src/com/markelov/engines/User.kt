@@ -3,7 +3,7 @@ package com.markelov.engines
 import iris.json.plain.IrisJsonItem
 
 
-class User : PollingAPI {
+class User : PollingAPI() {
     override fun getIdByToken(): Int {
         TODO("Not yet implemented")
     }
@@ -16,16 +16,9 @@ class User : PollingAPI {
         TODO("Not yet implemented")
     }
 
-    override fun runPolling() {
-        TODO("Not yet implemented")
-    }
-
     override fun run() {
         TODO("Not yet implemented")
     }
 
-    override fun stop() {
-        TODO("Not yet implemented")
-    }
 
 }
