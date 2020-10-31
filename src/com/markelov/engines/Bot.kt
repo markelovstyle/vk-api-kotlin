@@ -1,7 +1,6 @@
 package com.markelov.engines
 
 import com.markelov.api.Api
-import com.markelov.http.HTTPRequest
 import com.markelov.utils.BOT_POLLING_URL
 import iris.json.plain.IrisJsonItem
 
@@ -15,6 +14,7 @@ class Bot(
     private val groupId = if (groupId == 0) getIdByToken() else groupId
 
     override fun getIdByToken(): Int {
+        logger.info("Making API request groups.getById to get group_id")
         val request = api.request("groups.getById", null)
         return request["response"][0]["id"].asInt()
     }
@@ -42,10 +42,8 @@ class Bot(
     }
 
     private fun emulate(event: IrisJsonItem) {
-        if (!event.asMap().containsKey("updates"))
+        if (!event.asMap().containsKey("updates") || event["updates"].isNull()) // Проверить
             return
-
-        println(event.asMap()) //TODO: Добавить обработку эвентов
 
     }
 }
